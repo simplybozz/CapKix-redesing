@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+video-propuesta/node_modules
+video-propuesta/public
+video-propuesta/out
+
+# configuracion local de Claude
+.claude/

@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CapKix · Tienda en línea (propuesta)
 
-## Getting Started
+Propuesta de rediseño para **CapKix**, tienda de gorras New Era 59FIFTY y Nike Dunks 100% originales. Está hecha con **Next.js 16** y **React 19**, con **Tailwind CSS 4** para el diseño, y funciona en celular, tablet y computadora.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+## Qué incluye
+
+**Para los clientes**
+- **Inicio:**
+  - Portada "La corona la eliges tú" con las fotos reales de CapKix.
+  - Categorías: gorras New Era y Nike Dunks.
+  - Drops de la semana y lo más buscado.
+  - Cómo funciona el pago con comprobante.
+- **Tienda:** filtros por categoría, equipo, talla disponible y búsqueda, además de orden por precio.
+- **Página de producto:** fotos, tallas con existencia en vivo (59FIFTY de 7 a 8, Dunks de 7 a 12) y botón de WhatsApp.
+- **Carrito y pago solo por transferencia:**
+  1. El cliente elige envío a domicilio (por zona) o entrega en Santo Domingo.
+  2. Elige uno de los bancos de la tienda y ve los datos de la cuenta, con botones para copiar la cuenta, el RNC y el monto.
+  3. Sube la captura del comprobante y envía el pedido.
+- **"Mis pedidos":** el estado de cada pedido, paso a paso. Si rechazan el comprobante, el cliente ve el motivo y sube otro sin volver a comprar.
+- **"Cómo comprar":** los pasos, las zonas de envío y preguntas frecuentes.
+
+
+**Roles** (todo el que se registra entra como *Cliente*)
+| Rol | Qué puede hacer |
+| --- | --- |
+| Cliente | Comprar y ver sus pedidos |
+| Vendedor | Revisar comprobantes (confirmar o rechazar con motivo), despachar pedidos, publicar y editar productos y existencias por talla |
+| Administrador | Todo lo del vendedor. Además asigna roles, activa o desactiva usuarios, y edita las cuentas bancarias, las zonas de envío y los enlaces de WhatsApp e Instagram |
+
+
+**Flujo de un pedido**
+
+```
+Comprobante en revisión ──► Pago confirmado ──► En camino ──────────► Entregado
+        │                                   └─► Listo para entregar ─┘
+        └─► Rechazado ──(el cliente sube otro)──► En revisión
+Cualquier pedido no entregado se puede cancelar; la talla vuelve al inventario.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+La talla queda apartada desde que el cliente envía el pedido, así no se vende dos veces.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Estructura
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/(tienda)/  tienda pública: inicio, tienda, producto, carrito, pago, "Mi cuenta", cómo comprar
+  app/panel/     panel de vendedor y administrador (pedidos, productos, usuarios, ajustes)
+  components/    header, footer, carrito, tarjeta de producto, estado de pedido, subir imagen
+  lib/           modelos, catálogo, datos de la tienda y utilidades
+public/
+  products/      fotos de los productos
+  brand/         logo y portadas
+```

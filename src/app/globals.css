@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-paper: #f3f1ec;
+  --color-paper-2: #e9e6df;
+  --color-ink: #0c0c0c;
+  --color-ink-2: #2a2a2a;
+  --color-mute: #6d6a64;
+  --color-line: #dcd8cf;
+  --color-accent: #e3342f;
+  --color-ok: #1d7f49;
+  --color-warn: #b7791f;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-display: var(--font-anton), "Impact", sans-serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Toda clase "transition" de Tailwind usa esta duración y curva: hovers suaves. */
+  --default-transition-duration: 450ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 90s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 }
 
+html { scroll-behavior: smooth; }
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--color-ink); color: var(--color-paper); }
+
+/* Evita que textos largos (truncate) desborden las columnas en móvil. */
+@layer base {
+  .grid > * { min-width: 0; }
+}
+
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+  }
+  
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  
+  /* Logo original convertido en máscara: hereda el color del texto. */
+  .logo-mask {
+    background: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+  
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    height: 48px; padding: 0 1.4rem; border-radius: 999px;
+    font-weight: 700; font-size: 14px; letter-spacing: .01em;
+    transition: transform .55s var(--ease-soft), background-color .45s var(--ease-soft), color .45s var(--ease-soft),
+      border-color .45s var(--ease-soft), box-shadow .55s var(--ease-soft), opacity .45s var(--ease-soft);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgb(12 12 12 / .45); }
+  .btn:active { transform: translateY(0) scale(.97); transition-duration: .15s; }
+  .btn:disabled { opacity: .4; pointer-events: none; }
+  .btn-ink { background: var(--color-ink); color: var(--color-paper); }
+  .btn-ink:hover { background: var(--color-ink-2); }
+  .btn-light { background: #fff; color: var(--color-ink); }
+  .btn-light:hover { background: var(--color-paper-2); }
+  .btn-ghost { border: 1.5px solid var(--color-ink); color: var(--color-ink); }
+  .btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); }
+  .btn-sm { height: 38px; padding: 0 1rem; font-size: 13px; }
+  
+  .field {
+    width: 100%; height: 48px; padding: 0 1rem; border-radius: 14px;
+    background: #fff; border: 1.5px solid var(--color-line);
+    font-size: 15px; outline: none; transition: border-color .35s var(--ease-soft), box-shadow .35s var(--ease-soft);
+  }
+  textarea.field { height: auto; padding: .8rem 1rem; }
+  .field:focus { border-color: var(--color-ink); box-shadow: 0 0 0 4px rgb(12 12 12 / .06); }
+  .label { display: block; font-size: 13px; font-weight: 700; margin-bottom: .4rem; }
+  
+  .card { background: #fff; border-radius: 22px; border: 1px solid var(--color-line); }
+  
+  }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Solo se acortan las animaciones de entrada; los hovers (transiciones) y la cinta se mantienen suaves. */
+  *:not(.animate-marquee), *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+  }
 }
